@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Books - Digital Library{% endblock %}
+
+{% block content %}
+<div class="books-page">
+    <h2>Book Catalogue</h2>
+
+    <div class="search-filter">
+        <form method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Search by title..." value="{{ search }}">
+            <input type="text" name="author" placeholder="Filter by author..." value="{{ author_filter }}">
+            <button type="submit" class="btn">Search</button>
+        </form>
+    </div>
+
+    <div class="books-grid">
+        {% for book in books.items %}
+        <div class="book-card">
+            <h3><a href="{{ url_for('book_detail', book_id=book.id) }}">{{ book.title }}</a></h3>
+            <p class="author">by {{ book.author }}</p>
+            {% if book.published_date %}
+                <p class="published">Published: {{ book.published_date.strftime('%Y') }}</p>
+            {% endif %}
+            {% if book.description %}
+                <p class="description">{{ book.description[:100] }}...</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if books.has_prev or books.has_next %}
+    <div class="pagination">
+        {% if books.has_prev %}
+            <a href="{{ url_for('books', page=books.prev_num, search=search, author=author_filter) }}" class="btn">Previous</a>
+        {% endif %}
+        <span>Page {{ books.page }} of {{ books.pages }}</span>
+        {% if books.has_next %}
+            <a href="{{ url_for('books', page=books.next_num, search=search, author=author_filter) }}" class="btn">Next</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
