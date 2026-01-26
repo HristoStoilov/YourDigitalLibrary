@@ -51,9 +51,11 @@ class Book(db.Model):
     published_date = db.Column(db.Date)
     cover_image = db.Column(db.String(300))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    submitted_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # Relationships
     reviews = db.relationship('Review', backref='book', lazy=True)
+    submitter = db.relationship('User', backref='books_submitted', lazy=True)
 
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -161,7 +163,8 @@ def add_book():
             author=author,
             isbn=isbn,
             description=description,
-            published_date=published_date
+            published_date=published_date,
+            submitted_by=current_user.id
         )
         db.session.add(book)
         db.session.commit()
@@ -175,6 +178,10 @@ def add_book():
 @login_required
 def edit_book(book_id):
     book = Book.query.get_or_404(book_id)
+    if book.submitted_by != current_user.id:
+        flash('You do not have permission to edit this book.')
+        return redirect(url_for('book_detail', book_id=book.id))
+    
     if request.method == 'POST':
         book.title = request.form.get('title')
         book.author = request.form.get('author')
@@ -194,6 +201,10 @@ def edit_book(book_id):
 @login_required
 def delete_book(book_id):
     book = Book.query.get_or_404(book_id)
+    if book.submitted_by != current_user.id:
+        flash('You do not have permission to delete this book.')
+        return redirect(url_for('book_detail', book_id=book.id))
+    
     db.session.delete(book)
     db.session.commit()
     flash('Book deleted successfully!')
