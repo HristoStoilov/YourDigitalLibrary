@@ -35,7 +35,7 @@ class Book(db.Model):
     submitted_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # Relationships
-    reviews = db.relationship('Review', backref='book', lazy=True)
+    reviews = db.relationship('Review', backref='book', lazy=True, cascade='all, delete-orphan')
     submitter = db.relationship('User', backref='books_submitted', lazy=True)
 
 class Review(db.Model):
