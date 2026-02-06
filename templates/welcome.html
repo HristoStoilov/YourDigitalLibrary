@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Digital Library</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .welcome-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        .welcome-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        .welcome-subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        .welcome-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .welcome-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+        .features {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+        }
+        .feature-card {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .feature-card h3 {
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="{% if current_user.is_authenticated %}{{ url_for('main.user_welcome', username=current_user.username) }}{% else %}{{ url_for('main.index') }}{% endif %}" class="nav-brand">Digital Library</a>
+            <ul class="nav-menu">
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('book.user_books', username=current_user.username) }}">Books</a></li>
+                    <li><a href="{{ url_for('auth.dashboard', username=current_user.username) }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('auth.user_logout', username=current_user.username) }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('book.books') }}">Books</a></li>
+                    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="welcome-container">
+        <h1 class="welcome-title">📚 Welcome to Your Digital Library</h1>
+        <p class="welcome-subtitle">Discover, Share, and Review Your Favorite Books</p>
+        
+        <div class="welcome-buttons">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('book.user_books', username=current_user.username) }}" class="welcome-btn btn-primary">Browse Books</a>
+                <a href="{{ url_for('auth.dashboard', username=current_user.username) }}" class="welcome-btn btn-secondary">My Dashboard</a>
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="welcome-btn btn-primary">Login</a>
+                <a href="{{ url_for('auth.register') }}" class="welcome-btn btn-secondary">Register</a>
+            {% endif %}
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>📖 Browse Books</h3>
+                <p>Explore a vast collection of books from various genres and authors</p>
+            </div>
+            <div class="feature-card">
+                <h3>✍️ Add Books</h3>
+                <p>Contribute to the library by adding your favorite books</p>
+            </div>
+            <div class="feature-card">
+                <h3>⭐ Write Reviews</h3>
+                <p>Share your thoughts and rate books you've read</p>
+            </div>
+            <div class="feature-card">
+                <h3>📊 Track Progress</h3>
+                <p>Monitor your reading activity with personalized statistics</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Digital Library. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

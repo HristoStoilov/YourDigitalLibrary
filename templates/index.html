@@ -6,7 +6,13 @@
 <div class="hero">
     <h1>Welcome to Your Digital Library</h1>
     <p>Discover, review, and manage your book collection.</p>
-    <a href="{{ url_for('book.books') }}" class="btn btn-primary">Browse Books</a>
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('book.user_books', username=current_user.username) }}" class="btn btn-primary">Browse Books</a>
+        <a href="{{ url_for('auth.dashboard', username=current_user.username) }}" class="btn btn-secondary">My Dashboard</a>
+    {% else %}
+        <a href="{{ url_for('book.books') }}" class="btn btn-primary">Browse Books</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Login</a>
+    {% endif %}
 </div>
 
 <div class="features">

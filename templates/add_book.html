@@ -27,6 +27,7 @@
             <textarea id="description" name="description" rows="6"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Add Book</button>
+        <a href="{{ url_for('book.user_books', username=current_user.username) }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 {% endblock %}

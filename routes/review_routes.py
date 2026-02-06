@@ -21,3 +21,25 @@ def add_review(book_id):
 
     flash('Review added successfully!')
     return redirect(url_for('book.book_detail', book_id=book_id))
+
+@review_bp.route("/<username>/add_review/<int:book_id>", methods=['POST'])
+@login_required
+def user_add_review(username, book_id):
+    if current_user.username != username:
+        flash('You do not have permission to add reviews.')
+        return redirect(url_for('book.user_book_detail', username=current_user.username, book_id=book_id))
+    
+    rating = request.form.get('rating', type=int)
+    comment = request.form.get('comment')
+
+    review = Review(
+        rating=rating,
+        comment=comment,
+        user_id=current_user.id,
+        book_id=book_id
+    )
+    db.session.add(review)
+    db.session.commit()
+
+    flash('Review added successfully!')
+    return redirect(url_for('book.user_book_detail', username=username, book_id=book_id))

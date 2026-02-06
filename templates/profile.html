@@ -18,5 +18,10 @@
         <h3>Your Activity</h3>
         <p>Reviews written: {{ current_user.reviews|length }}</p>
     </div>
+    
+    <div class="profile-actions">
+        <a href="{{ url_for('auth.dashboard', username=current_user.username) }}" class="btn btn-primary">Go to Dashboard</a>
+        <a href="{{ url_for('auth.change_password', username=current_user.username) }}" class="btn btn-secondary">Change Password</a>
+    </div>
 </div>
 {% endblock %}
