@@ -10,6 +10,8 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(150), nullable=False)
+    role = db.Column(db.String(20), default='normal', nullable=False)  # 'normal' or 'admin'
+    is_banned = db.Column(db.Boolean, default=False, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     profile_picture = db.Column(db.String(300))
     bio = db.Column(db.Text)
@@ -22,6 +24,9 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def is_admin(self):
+        return self.role == 'admin'
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)

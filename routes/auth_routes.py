@@ -38,7 +38,16 @@ def login():
 
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
+            if user.is_banned:
+                flash('Your account has been banned. Please contact the administrator.')
+                return redirect(url_for('auth.login'))
+            
             login_user(user)
+            
+            # Redirect admin to admin dashboard
+            if user.is_admin():
+                return redirect(url_for('admin.admin_dashboard', username=user.username))
+            
             return redirect(url_for('auth.dashboard', username=user.username))
 
         flash('Invalid username or password')

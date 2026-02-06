@@ -15,6 +15,9 @@
                     <li><a href="{{ url_for('book.user_books', username=current_user.username) }}">Books</a></li>
                     <li><a href="{{ url_for('book.add_book', username=current_user.username) }}">Add Book</a></li>
                     <li><a href="{{ url_for('auth.dashboard', username=current_user.username) }}">Dashboard</a></li>
+                    {% if current_user.is_admin() %}
+                        <li><a href="{{ url_for('admin.admin_dashboard', username=current_user.username) }}" style="color: #ff6b6b; font-weight: bold;">Admin Panel</a></li>
+                    {% endif %}
                     <li><a href="{{ url_for('auth.user_profile', username=current_user.username) }}">Profile</a></li>
                     <li><a href="{{ url_for('auth.user_logout', username=current_user.username) }}">Logout</a></li>
                 {% else %}

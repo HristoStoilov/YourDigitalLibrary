@@ -26,13 +26,25 @@ from routes.main_routes import main_bp
 from routes.auth_routes import auth_bp
 from routes.book_routes import book_bp
 from routes.review_routes import review_bp
+from routes.admin_routes import admin_bp
 
 app.register_blueprint(main_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(book_bp)
 app.register_blueprint(review_bp)
+app.register_blueprint(admin_bp)
 
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
+        
+        # Create initial admin user if it doesn't exist
+        admin = User.query.filter_by(username='admin').first()
+        if not admin:
+            admin = User(username='admin', email='admin@library.com', role='admin')
+            admin.set_password('admin')
+            db.session.add(admin)
+            db.session.commit()
+            print("Admin user created successfully!")
+    
     app.run(debug=True)
