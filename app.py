@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_scss import Scss
 from flask_login import LoginManager
+from flask_mail import Mail
 from models import db, User
 
 # Initialize Flask app
@@ -9,8 +10,17 @@ app.config['SECRET_KEY'] = 'your-secret-key-here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///library.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# Email configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'hristosstoilov@gmail.com' 
+app.config['MAIL_PASSWORD'] = 'rlfs rtlu ximg zkri '  
+app.config['MAIL_DEFAULT_SENDER'] = 'hristosstoilov@gmail.com'  
+
 # Initialize extensions
 db.init_app(app)
+mail = Mail(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'auth.login'
 
@@ -38,7 +48,6 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         
-        # Create initial admin user if it doesn't exist
         admin = User.query.filter_by(username='admin').first()
         if not admin:
             admin = User(username='admin', email='admin@library.com', role='admin')

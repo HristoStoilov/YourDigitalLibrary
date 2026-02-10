@@ -14,7 +14,14 @@
             <p class="isbn">ISBN: {{ book.isbn }}</p>
         {% endif %}
         {% if book.submitter %}
-            <p class="submitted-by">Added by: <strong>{{ book.submitter.username }}</strong></p>
+            <p class="submitted-by">
+                Added by: <strong>{{ book.submitter.username }}</strong>
+                <br>
+                Contact: <a href="mailto:{{ book.submitter.email }}" class="email-link">{{ book.submitter.email }}</a>
+                {% if current_user.is_authenticated and current_user.id != book.submitted_by %}
+                    <button class="btn btn-sm btn-primary" onclick="openContactModal()">📧 Send Message</button>
+                {% endif %}
+            </p>
         {% endif %}
     </div>
 
@@ -90,4 +97,112 @@
         {% endif %}
     </div>
 </div>
+
+<!-- Contact Modal -->
+{% if current_user.is_authenticated and book.submitter and current_user.id != book.submitted_by %}
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeContactModal()">&times;</span>
+        <h3>📧 Contact {{ book.submitter.username }}</h3>
+        <p>Send a message about "<strong>{{ book.title }}</strong>"</p>
+        <form method="POST" action="{{ url_for('book.contact_submitter', book_id=book.id) }}">
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" value="Inquiry about {{ book.title }}" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="6" required class="form-control" placeholder="Write your message here..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeContactModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<script>
+function openContactModal() {
+    document.getElementById('contactModal').style.display = 'block';
+}
+
+function closeContactModal() {
+    document.getElementById('contactModal').style.display = 'none';
+}
+
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+    var modal = document.getElementById('contactModal');
+    if (event.target == modal) {
+        closeContactModal();
+    }
+}
+</script>
+
+<style>
+.email-link {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+.email-link:hover {
+    text-decoration: underline;
+}
+.btn-sm {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 2rem;
+    border: 1px solid #888;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 20px;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+</style>
 {% endblock %}

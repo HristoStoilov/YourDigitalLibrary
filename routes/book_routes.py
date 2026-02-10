@@ -1,5 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
+from flask_mail import Message
 from models import Book, Review, User, db
 from datetime import datetime
 from sqlalchemy.orm import joinedload
@@ -117,3 +118,72 @@ def delete_book(book_id):
     db.session.commit()
     flash('Book deleted successfully!')
     return redirect(url_for('book.user_books'))
+
+@book_bp.route("/book/<int:book_id>/contact", methods=['POST'])
+@login_required
+def contact_submitter(book_id):
+    book = Book.query.options(joinedload(Book.submitter)).get_or_404(book_id)
+    
+    # Prevent users from contacting themselves
+    if book.submitted_by == current_user.id:
+        flash('You cannot send a message to yourself.')
+        return redirect(url_for('book.book_detail', book_id=book_id))
+    
+    subject = request.form.get('subject')
+    message_body = request.form.get('message')
+    
+    if not subject or not message_body:
+        flash('Subject and message are required.')
+        return redirect(url_for('book.book_detail', book_id=book_id))
+    
+    # Import mail here to avoid circular import
+    from app import mail
+    
+    # Create email message
+    msg = Message(
+        subject=f"[Digital Library] {subject}",
+        recipients=[book.submitter.email],
+        reply_to=current_user.email
+    )
+    
+    msg.body = f"""
+Hello {book.submitter.username},
+
+You have received a message from {current_user.username} regarding your book "{book.title}":
+
+---
+{message_body}
+---
+
+You can reply directly to this email to respond to {current_user.username} at: {current_user.email}
+
+Best regards,
+Digital Library Team
+    """
+    
+    msg.html = f"""
+    <html>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                <h2 style="color: #007bff;">Digital Library - New Message</h2>
+                <p>Hello <strong>{book.submitter.username}</strong>,</p>
+                <p>You have received a message from <strong>{current_user.username}</strong> regarding your book "<strong>{book.title}</strong>":</p>
+                <div style="background: #f8f9fa; padding: 15px; border-left: 4px solid #007bff; margin: 20px 0;">
+                    <p style="margin: 0; white-space: pre-wrap;">{message_body}</p>
+                </div>
+                <p>You can reply directly to this email to respond to {current_user.username} at: <a href="mailto:{current_user.email}">{current_user.email}</a></p>
+                <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+                <p style="color: #666; font-size: 0.9em;">Best regards,<br>Digital Library Team</p>
+            </div>
+        </body>
+    </html>
+    """
+    
+    try:
+        mail.send(msg)
+        flash(f'Your message has been sent to {book.submitter.username}!')
+    except Exception as e:
+        flash(f'Failed to send message. Please try again later or contact {book.submitter.email} directly.')
+        print(f"Error sending email: {e}")
+    
+    return redirect(url_for('book.book_detail', book_id=book_id))
