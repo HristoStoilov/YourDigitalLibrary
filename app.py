@@ -14,9 +14,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'hristosstoilov@gmail.com' 
-app.config['MAIL_PASSWORD'] = 'rlfs rtlu ximg zkri '  
-app.config['MAIL_DEFAULT_SENDER'] = 'hristosstoilov@gmail.com'  
+app.config['MAIL_USERNAME'] = 'digitallibrarytestmail@gmail.com' 
+app.config['MAIL_PASSWORD'] = 'nkiv engw ucog otim '  
+app.config['MAIL_DEFAULT_SENDER'] = 'digitallibrarytestmail@gmail.com'  
 
 # Initialize extensions
 db.init_app(app)
