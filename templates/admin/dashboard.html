@@ -8,10 +8,11 @@
     <p class="welcome-message">Welcome, <strong>{{ current_user.username }}</strong>!</p>
 
     <div class="admin-nav">
-        <a href="{{ url_for('admin.admin_dashboard', username=current_user.username) }}" class="btn btn-primary">Dashboard</a>
-        <a href="{{ url_for('admin.manage_users', username=current_user.username) }}" class="btn btn-secondary">Manage Users</a>
-        <a href="{{ url_for('admin.manage_reviews', username=current_user.username) }}" class="btn btn-secondary">Manage Reviews</a>
-        <a href="{{ url_for('book.user_books', username=current_user.username) }}" class="btn btn-secondary">View Site</a>
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-primary">Dashboard</a>
+        <a href="{{ url_for('admin.manage_users') }}" class="btn btn-secondary">Manage Users</a>
+        <a href="{{ url_for('admin.manage_books') }}" class="btn btn-secondary">Manage Books</a>
+        <a href="{{ url_for('admin.manage_reviews') }}" class="btn btn-secondary">Manage Reviews</a>
+        <a href="{{ url_for('book.user_books') }}" class="btn btn-secondary">View Site</a>
     </div>
 
     <div class="stats-overview">

@@ -73,12 +73,12 @@
 <body>
     <nav>
         <div class="nav-container">
-            <a href="{% if current_user.is_authenticated %}{{ url_for('main.user_welcome', username=current_user.username) }}{% else %}{{ url_for('main.index') }}{% endif %}" class="nav-brand">Digital Library</a>
+            <a href="{% if current_user.is_authenticated %}{{ url_for('main.user_welcome') }}{% else %}{{ url_for('main.index') }}{% endif %}" class="nav-brand">Digital Library</a>
             <ul class="nav-menu">
                 {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('book.user_books', username=current_user.username) }}">Books</a></li>
-                    <li><a href="{{ url_for('auth.dashboard', username=current_user.username) }}">Dashboard</a></li>
-                    <li><a href="{{ url_for('auth.user_logout', username=current_user.username) }}">Logout</a></li>
+                    <li><a href="{{ url_for('book.user_books') }}">Books</a></li>
+                    <li><a href="{{ url_for('auth.dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('auth.user_logout') }}">Logout</a></li>
                 {% else %}
                     <li><a href="{{ url_for('book.books') }}">Books</a></li>
                     <li><a href="{{ url_for('auth.login') }}">Login</a></li>
@@ -94,8 +94,8 @@
         
         <div class="welcome-buttons">
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('book.user_books', username=current_user.username) }}" class="welcome-btn btn-primary">Browse Books</a>
-                <a href="{{ url_for('auth.dashboard', username=current_user.username) }}" class="welcome-btn btn-secondary">My Dashboard</a>
+                <a href="{{ url_for('book.user_books') }}" class="welcome-btn btn-primary">Browse Books</a>
+                <a href="{{ url_for('auth.dashboard') }}" class="welcome-btn btn-secondary">My Dashboard</a>
             {% else %}
                 <a href="{{ url_for('auth.login') }}" class="welcome-btn btn-primary">Login</a>
                 <a href="{{ url_for('auth.register') }}" class="welcome-btn btn-secondary">Register</a>

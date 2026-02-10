@@ -46,45 +46,32 @@ def login():
             
             # Redirect admin to admin dashboard
             if user.is_admin():
-                return redirect(url_for('admin.admin_dashboard', username=user.username))
+                return redirect(url_for('admin.admin_dashboard'))
             
-            return redirect(url_for('auth.dashboard', username=user.username))
+            return redirect(url_for('auth.dashboard'))
 
         flash('Invalid username or password')
     return render_template("login.html")
 
-@auth_bp.route("/logout")
+@auth_bp.route("/user/logout")
 @login_required
-def logout():
-    logout_user()
-    return redirect(url_for('main.index'))
-
-@auth_bp.route("/<username>/logout")
-@login_required
-def user_logout(username):
+def user_logout():
     logout_user()
     return redirect(url_for('main.index'))
 
 @auth_bp.route("/profile")
 @login_required
 def profile():
-    return redirect(url_for('auth.user_profile', username=current_user.username))
+    return redirect(url_for('auth.user_profile'))
 
-@auth_bp.route("/<username>/profile")
+@auth_bp.route("/user/profile")
 @login_required
-def user_profile(username):
-    if current_user.username != username:
-        flash('You do not have permission to view this profile.')
-        return redirect(url_for('auth.user_profile', username=current_user.username))
+def user_profile():
     return render_template("profile.html", user=current_user)
 
-@auth_bp.route("/<username>/dashboard")
+@auth_bp.route("/user/dashboard")
 @login_required
-def dashboard(username):
-    if current_user.username != username:
-        flash('You do not have permission to view this dashboard.')
-        return redirect(url_for('auth.dashboard', username=current_user.username))
-    
+def dashboard():
     # Get user stats
     total_books_added = Book.query.filter_by(submitted_by=current_user.id).count()
     total_reviews_written = Review.query.filter_by(user_id=current_user.id).count()
@@ -98,13 +85,9 @@ def dashboard(username):
                          recent_books=recent_books,
                          recent_reviews=recent_reviews)
 
-@auth_bp.route("/<username>/change-password", methods=['GET', 'POST'])
+@auth_bp.route("/user/change-password", methods=['GET', 'POST'])
 @login_required
-def change_password(username):
-    if current_user.username != username:
-        flash('You do not have permission to change this password.')
-        return redirect(url_for('auth.dashboard', username=current_user.username))
-    
+def change_password():
     if request.method == 'POST':
         current_password = request.form.get('current_password')
         new_password = request.form.get('new_password')
@@ -112,19 +95,19 @@ def change_password(username):
         
         if not current_user.check_password(current_password):
             flash('Current password is incorrect.')
-            return redirect(url_for('auth.change_password', username=username))
+            return redirect(url_for('auth.change_password'))
         
         if new_password != confirm_password:
             flash('New passwords do not match.')
-            return redirect(url_for('auth.change_password', username=username))
+            return redirect(url_for('auth.change_password'))
         
         if len(new_password) < 6:
             flash('New password must be at least 6 characters long.')
-            return redirect(url_for('auth.change_password', username=username))
+            return redirect(url_for('auth.change_password'))
         
         current_user.set_password(new_password)
         db.session.commit()
         flash('Password changed successfully!')
-        return redirect(url_for('auth.dashboard', username=username))
+        return redirect(url_for('auth.dashboard'))
     
     return render_template("change_password.html", user=current_user)

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from models import User, Book, Review, db
-from sqlalchemy import func, Date
+from sqlalchemy import func, Date, or_
 from datetime import datetime, timedelta
 from functools import wraps
 
@@ -16,13 +16,10 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-@admin_bp.route("/<username>/admin/dashboard")
+@admin_bp.route("/user/admin/dashboard")
 @login_required
 @admin_required
-def admin_dashboard(username):
-    if current_user.username != username:
-        return redirect(url_for('admin.admin_dashboard', username=current_user.username))
-    
+def admin_dashboard():
     # Get statistics
     total_users = User.query.count()
     total_books = Book.query.count()
@@ -66,13 +63,10 @@ def admin_dashboard(username):
                          recent_books=recent_books,
                          recent_reviews=recent_reviews)
 
-@admin_bp.route("/<username>/admin/users")
+@admin_bp.route("/user/admin/users")
 @login_required
 @admin_required
-def manage_users(username):
-    if current_user.username != username:
-        return redirect(url_for('admin.manage_users', username=current_user.username))
-    
+def manage_users():
     page = request.args.get('page', 1, type=int)
     search = request.args.get('search', '')
     
@@ -83,57 +77,75 @@ def manage_users(username):
     users = query.order_by(User.created_at.desc()).paginate(page=page, per_page=20)
     return render_template('admin/users.html', users=users, search=search)
 
-@admin_bp.route("/<username>/admin/ban_user/<int:user_id>", methods=['POST'])
+@admin_bp.route("/user/admin/ban_user/<int:user_id>", methods=['POST'])
 @login_required
 @admin_required
-def ban_user(username, user_id):
-    if current_user.username != username:
-        return redirect(url_for('admin.manage_users', username=current_user.username))
-    
+def ban_user(user_id):
     user = User.query.get_or_404(user_id)
     
     if user.is_admin():
         flash('Cannot ban an admin user.')
-        return redirect(url_for('admin.manage_users', username=username))
+        return redirect(url_for('admin.manage_users'))
     
     user.is_banned = True
     db.session.commit()
     flash(f'User {user.username} has been banned.')
-    return redirect(url_for('admin.manage_users', username=username))
+    return redirect(url_for('admin.manage_users'))
 
-@admin_bp.route("/<username>/admin/unban_user/<int:user_id>", methods=['POST'])
+@admin_bp.route("/user/admin/unban_user/<int:user_id>", methods=['POST'])
 @login_required
 @admin_required
-def unban_user(username, user_id):
-    if current_user.username != username:
-        return redirect(url_for('admin.manage_users', username=current_user.username))
-    
+def unban_user(user_id):
     user = User.query.get_or_404(user_id)
     user.is_banned = False
     db.session.commit()
     flash(f'User {user.username} has been unbanned.')
-    return redirect(url_for('admin.manage_users', username=username))
+    return redirect(url_for('admin.manage_users'))
 
-@admin_bp.route("/<username>/admin/reviews")
+@admin_bp.route("/user/admin/reviews")
 @login_required
 @admin_required
-def manage_reviews(username):
-    if current_user.username != username:
-        return redirect(url_for('admin.manage_reviews', username=current_user.username))
-    
+def manage_reviews():
     page = request.args.get('page', 1, type=int)
     reviews = Review.query.order_by(Review.created_at.desc()).paginate(page=page, per_page=20)
     return render_template('admin/reviews.html', reviews=reviews)
 
-@admin_bp.route("/<username>/admin/delete_review/<int:review_id>", methods=['POST'])
+@admin_bp.route("/user/admin/delete_review/<int:review_id>", methods=['POST'])
 @login_required
 @admin_required
-def delete_review(username, review_id):
-    if current_user.username != username:
-        return redirect(url_for('admin.manage_reviews', username=current_user.username))
-    
+def delete_review(review_id):
     review = Review.query.get_or_404(review_id)
     db.session.delete(review)
     db.session.commit()
     flash('Review has been deleted.')
-    return redirect(url_for('admin.manage_reviews', username=username))
+    return redirect(url_for('admin.manage_reviews'))
+
+@admin_bp.route("/user/admin/books")
+@login_required
+@admin_required
+def manage_books():
+    page = request.args.get('page', 1, type=int)
+    search = request.args.get('search', '')
+    
+    query = Book.query
+    if search:
+        query = query.filter(
+            or_(
+                Book.title.contains(search),
+                Book.author.contains(search)
+            )
+        )
+    
+    books = query.order_by(Book.created_at.desc()).paginate(page=page, per_page=20)
+    return render_template('admin/books.html', books=books, search=search)
+
+@admin_bp.route("/user/admin/delete_book/<int:book_id>", methods=['POST'])
+@login_required
+@admin_required
+def delete_book(book_id):
+    book = Book.query.get_or_404(book_id)
+    book_title = book.title
+    db.session.delete(book)
+    db.session.commit()
+    flash(f'Book "{book_title}" has been deleted.')
+    return redirect(url_for('admin.manage_books'))

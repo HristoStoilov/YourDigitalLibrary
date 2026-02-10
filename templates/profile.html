@@ -20,8 +20,8 @@
     </div>
     
     <div class="profile-actions">
-        <a href="{{ url_for('auth.dashboard', username=current_user.username) }}" class="btn btn-primary">Go to Dashboard</a>
-        <a href="{{ url_for('auth.change_password', username=current_user.username) }}" class="btn btn-secondary">Change Password</a>
+        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+        <a href="{{ url_for('auth.change_password') }}" class="btn btn-secondary">Change Password</a>
     </div>
 </div>
 {% endblock %}
