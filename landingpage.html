@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Digital Library - Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        header .subtitle {
+            font-size: 1.3em;
+            font-weight: 300;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .tech-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-top: 3px solid #667eea;
+            text-align: center;
+        }
+
+        .tech-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .tech-item span {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .getting-started {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 30px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .getting-started h3 {
+            margin-top: 0;
+        }
+
+        .step {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #764ba2;
+        }
+
+        .step strong {
+            color: #764ba2;
+            font-size: 1.1em;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.05em;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        .emoji {
+            margin-right: 8px;
+        }
+
+        .faq-item {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .faq-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .faq-item p {
+            color: #555;
+            margin: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            header .subtitle {
+                font-size: 1.1em;
+            }
+
+            h2 {
+                font-size: 1.6em;
+            }
+
+            section {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><span class="emoji">📚</span>Your Digital Library</h1>
+        <p class="subtitle">A community-driven platform for sharing, discovering, and discussing books</p>
+    </header>
+
+    <div class="container">
+        <!-- Overview Section -->
+        <section id="overview">
+            <h2><span class="emoji">🎯</span>Project Overview</h2>
+            <p>Welcome to <strong>Your Digital Library</strong> – a web-based platform that revolutionizes how communities share and exchange knowledge through books. Our application combines social interaction with practical library management features, making it effortless for readers to connect, discover, and exchange books.</p>
+            
+            <div class="getting-started">
+                <h3>Why Choose Your Digital Library?</h3>
+                <ul>
+                    <li><strong>Community-Driven:</strong> Connect with fellow book enthusiasts in your community</li>
+                    <li><strong>Sustainable:</strong> Give books a second life through donations and resales</li>
+                    <li><strong>User-Friendly:</strong> Intuitive interface designed for everyone</li>
+                    <li><strong>Social Features:</strong> Reviews, ratings, and direct communication with other members</li>
+                    <li><strong>Flexible Sharing:</strong> Donate books for free or sell them at your own price</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features">
+            <h2><span class="emoji">✨</span>Core Features</h2>
+
+            <h3>👤 User Management</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>User Registration</h4>
+                    <p>Create a new account with secure credentials and get started in minutes.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Authentication</h4>
+                    <p>Secure login and logout with reliable session handling to protect your account.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Profile Management</h4>
+                    <p>Edit personal information, view your activity history, and manage your listed books.</p>
+                </div>
+            </div>
+
+            <h3>📖 Book Management</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Book Registration</h4>
+                    <p>Add books to the platform with details like title, author, genre, description, and condition.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Digital Catalogue</h4>
+                    <p>Browse through all available books shared by users in your community.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Smart Search</h4>
+                    <p>Search by title, author, or genre, and filter by availability (donation or sale).</p>
+                </div>
+            </div>
+
+            <h3>⭐ Community Interaction</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Book Reviews</h4>
+                    <p>Write and read detailed reviews to help others discover quality content.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Rating System</h4>
+                    <p>Rate books based on your reading experience and help build a trustworthy community.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Comments</h4>
+                    <p>Engage in discussions about books and reviews with other community members.</p>
+                </div>
+            </div>
+
+            <h3>💬 Communication</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Direct Messaging</h4>
+                    <p>Send private messages to other users for questions, discussions, or transaction details.</p>
+                </div>
+            </div>
+
+            <h3>🎁 Transaction Management</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Book Donation</h4>
+                    <p>Offer books for free to other community members who need them.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Book Selling</h4>
+                    <p>List books for sale and negotiate prices directly with interested buyers via chat.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Stack Section -->
+        <section id="technology">
+            <h2><span class="emoji">🛠️</span>Technology Stack</h2>
+            <p>Your Digital Library is built with modern, reliable technologies to ensure smooth performance and scalability:</p>
+            
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <strong>Backend</strong>
+                    <span>Python with Flask framework</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Frontend</strong>
+                    <span>HTML5, CSS3, JavaScript</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Database</strong>
+                    <span>SQLAlchemy ORM</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Authentication</strong>
+                    <span>Flask-Login with secure sessions</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Email Services</strong>
+                    <span>Flask-Mail for notifications</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Testing</strong>
+                    <span>Pytest for quality assurance</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started Section -->
+        <section id="getting-started">
+            <h2><span class="emoji">🚀</span>Getting Started</h2>
+            
+            <div class="getting-started">
+                <h3>For New Users</h3>
+                <div class="step">
+                    <strong>Step 1: Register</strong>
+                    <p>Click the "Register" button and fill in your details to create a new account. Choose a strong password to keep your account secure.</p>
+                </div>
+                <div class="step">
+                    <strong>Step 2: Complete Your Profile</strong>
+                    <p>Add a profile picture and bio so other community members can learn more about you.</p>
+                </div>
+                <div class="step">
+                    <strong>Step 3: Browse Books</strong>
+                    <p>Explore our catalogue of available books. Use the search and filter features to find books that interest you.</p>
+                </div>
+                <div class="step">
+                    <strong>Step 4: Connect with Others</strong>
+                    <p>Read reviews, leave ratings, and start conversations with other book lovers in the community.</p>
+                </div>
+                <div class="step">
+                    <strong>Step 5: Share Your Books</strong>
+                    <p>Add your own books to the platform – donate them for free or list them for sale.</p>
+                </div>
+            </div>
+
+            <div class="getting-started" style="margin-top: 30px;">
+                <h3>For Book Sellers/Donors</h3>
+                <ol>
+                    <li>Log in to your account</li>
+                    <li>Go to "My Books" or "Add Book"</li>
+                    <li>Fill in book details (title, author, genre, condition, price if selling)</li>
+                    <li>Upload a book cover image</li>
+                    <li>Wait for interested buyers/recipients to contact you</li>
+                    <li>Negotiate via chat and arrange exchange</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Project Goals Section -->
+        <section id="goals">
+            <h2><span class="emoji">📌</span>Our Goals</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Encourage Reading Culture</h4>
+                    <p>Promote book sharing and reading within communities to foster a culture of knowledge sharing.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>User-Friendly Experience</h4>
+                    <p>Provide a simple and intuitive interface that makes managing books effortless for everyone.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Enable Social Interaction</h4>
+                    <p>Facilitate meaningful connections through reviews, ratings, and direct communication.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Promote Sustainability</h4>
+                    <p>Support sustainable book reuse through donation and resale, reducing waste and helping the environment.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq">
+            <h2><span class="emoji">❓</span>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <strong>Is the platform free to use?</strong>
+                <p>Yes! Registering and browsing books is completely free. You only pay when you choose to purchase books from other users – prices are set by sellers.</p>
+            </div>
+
+            <div class="faq-item">
+                <strong>How do I donate a book?</strong>
+                <p>Add the book to your inventory, mark it as "Donate," and interested community members will contact you to arrange pickup or delivery.</p>
+            </div>
+
+            <div class="faq-item">
+                <strong>Is my payment information secure?</strong>
+                <p>We employ industry-standard security practices to protect your data. Always follow safe trading practices and use the platform's messaging system for transaction details.</p>
+            </div>
+
+            <div class="faq-item">
+                <strong>Can I edit my book listings?</strong>
+                <p>Yes! You can edit your book information, price, and availability status at any time from your profile dashboard.</p>
+            </div>
+
+            <div class="faq-item">
+                <strong>How do reviews and ratings work?</strong>
+                <p>After completing a transaction, you can leave a review and rating for the book and seller. This helps other community members make informed decisions.</p>
+            </div>
+
+            <div class="faq-item">
+                <strong>Can I contact other users directly?</strong>
+                <p>Yes! Use the private messaging feature to chat with other community members about books or arrange transactions.</p>
+            </div>
+
+            <div class="faq-item">
+                <strong>What if I encounter an issue with another user?</strong>
+                <p>Report the issue to our admin team through your account settings. We take community safety seriously.</p>
+            </div>
+        </section>
+
+        <!-- Support Section -->
+        <section id="support">
+            <h2><span class="emoji">💡</span>Tips for Success</h2>
+            
+            <ul>
+                <li><strong>Complete Your Profile:</strong> Users are more likely to trade with members who have complete, detailed profiles.</li>
+                <li><strong>Provide Accurate Details:</strong> Include accurate book conditions, prices, and descriptions to build trust.</li>
+                <li><strong>Respond Promptly:</strong> Quick responses to messages encourage successful transactions and positive reviews.</li>
+                <li><strong>Be Respectful:</strong> Treat all community members with respect and courtesy.</li>
+                <li><strong>Take Good Photos:</strong> Clear book cover photos help other users identify exactly what you're offering.</li>
+                <li><strong>Read Reviews:</strong> Check seller/donor reviews before deciding to trade with them.</li>
+                <li><strong>Communicate Clearly:</strong> Use the chat feature to clarify details and arrange safe meeting points.</li>
+            </ul>
+        </section>
+
+        <!-- Call to Action -->
+        <section style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2 style="color: white; border-bottom-color: white;">Ready to Join Our Community?</h2>
+            <p style="color: white; font-size: 1.1em; margin-bottom: 25px;">Start sharing, discovering, and discussing books with book lovers in your community today.</p>
+            <a href="/register" class="cta-button" style="background: white; color: #667eea; font-weight: 700;">Get Started Now</a>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Your Digital Library. All rights reserved. | Building communities through books.</p>
+    </footer>
+</body>
+</html>
